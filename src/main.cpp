@@ -5,8 +5,6 @@
 #include <vector>
 
 int main(int argc, char** argv) {
-    
-    return 0;
     // Handle console line arguments
     {
         std::vector<std::string> args;

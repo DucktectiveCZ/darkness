@@ -8,20 +8,19 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 #include <cstdlib>
-#include <functional>
 #include <spdlog/spdlog.h>
 #include <boost/serialization/config.hpp>
 #include <string>
 #include <sys/stat.h>
 
-std::string game::getErrorName(Error error) {
-    static const std::unordered_map<Error, const char*> names = {
-        { Error::SUCCESS,   "success" },
-        { Error::UNKNOWN,   "unknown"},
-        { Error::SDL_INIT,  "sdl_init"},
-        { Error::GAME_INIT, "game_init" },
-        { Error::SDL_ERROR, "sdl_error" },
-        { Error::ILLEGAL_GET, "illegal_get" },
+std::string game::getErrorName(Status error) {
+    static const std::unordered_map<Status, const char*> names = {
+        { Status::SUCCESS,   "success" },
+        { Status::UNKNOWN,   "unknown"},
+        { Status::SDL_INIT,  "sdl_init"},
+        { Status::GAME_INIT, "game_init" },
+        { Status::SDL_ERROR, "sdl_error" },
+        { Status::ILLEGAL_GET, "illegal_get" },
     };
     auto it = names.find(error);
     if (it != names.end())
@@ -29,7 +28,7 @@ std::string game::getErrorName(Error error) {
     return "<undefined>";
 }
 std::string game::getErrorName(int error) {
-    return getErrorName((game::Error)error);
+    return getErrorName((game::Status)error);
 }
 int game::m_initsdl() {
     spdlog::info("Starting SDL2 initialization...");
@@ -109,10 +108,7 @@ int game::m_render() {
     SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
     SDL_RenderClear(m_renderer);
     
-    // Render
-    for (auto callback : m_renderCallbacks) {
-        callback();
-    }
+    // TODO Render all registered drawables
 
     SDL_RenderPresent(m_renderer);
     return game::SUCCESS;
@@ -165,7 +161,7 @@ void game::panic(int errcode) {
 }
 void game::panic() {
     spdlog::critical("A critical error has occured in the application");
-    m_cleanup(Error::UNKNOWN);
+    m_cleanup(Status::UNKNOWN);
 }
 
 inline const SDL_Point& game::getMousePos() {
@@ -175,12 +171,16 @@ inline SDL_Renderer* game::getRenderer() {
     return m_renderer;
 }
 
-int game::pushDrawCallback(const IDrawable::RenderCallback& callback) {
-    m_renderCallbacks.push_back(callback);
+game::Status game::registerDrawable(IDrawable* drawable) {
+    m_drawables.push_back(drawable);
     return game::SUCCESS;
 }
-
-int game::pushDrawable(const IDrawable& drawable) {
-    
-    return game::SUCCESS;
-}   
+game::Status game::unregisterDrawable(IDrawable* drawable) {
+    for (auto it = m_drawables.begin(); it != m_drawables.end(); it++) {
+        if (*it == drawable) {
+            m_drawables.erase(it);
+            return game::SUCCESS;
+        }
+    }
+    return game::ILLEGAL_GET;
+}

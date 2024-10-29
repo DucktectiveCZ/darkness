@@ -7,11 +7,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <vector>
 
 namespace game
 {
     // Types
-    enum Error {
+    enum Status {
         SUCCESS = 0,
         UNKNOWN = 1,
         SDL_INIT,
@@ -21,14 +22,14 @@ namespace game
     };
     // Methods
     void start();
-    std::string getErrorName(Error error);
+    std::string getErrorName(Status error);
     std::string getErrorName(int error);
     void stop();
     void panic(int errcode, std::string message); // Called on a fatal error
     void panic(int errcode);
     void panic();
-    int pushDrawCallback(const IDrawable::RenderCallback& callback);
-    int pushDrawable(const IDrawable& drawable);
+    Status registerDrawable(IDrawable* drawable);
+    Status unregisterDrawable(IDrawable* drawable);
 
     // Getters & Setters
     const SDL_Point& getMousePos();
@@ -47,7 +48,7 @@ namespace game
     inline SDL_Point m_mousePos; // The mouse position buffer
     inline SDL_Window* m_window; // The main window
     inline SDL_Renderer* m_renderer; // The main window's renderer
-    inline std::vector<IDrawable::RenderCallback> m_renderCallbacks; // Objects to be drawn
+    inline std::vector<IDrawable*> m_drawables; // IDrawable objects to draw
 } // game
 
 #endif // GAME_H
