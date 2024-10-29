@@ -1,5 +1,6 @@
 #ifndef ENTITY_H
 #define ENTITY_H
+#include "Rendering.hpp"
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
@@ -11,14 +12,14 @@
 namespace game
 {
     /// @brief A `SDL_Texture*` wrapper class
-    class Texture {
+    class Texture : public IRenderable {
     public:
         /// @brief Load a texture from a file
         /// @param path is the path to the file 
         Texture(std::string path);
         ~Texture();
         Texture(const Texture& other); // Copy
-        inline Texture(Texture&& other) noexcept = default; // Move
+        Texture(Texture&& other) noexcept; // Move
 
         /// @brief Gets the texture's dimensions (width & height)
         const SDL_Rect& getDimensions() const;
@@ -37,6 +38,8 @@ namespace game
 
         Texture& operator=(const Texture& other); // Assign
         
+        int render(SDL_Point pos) const override;
+
         // debug
         size_t getTxtRefs() const;
     private:

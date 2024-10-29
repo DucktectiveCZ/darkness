@@ -9,6 +9,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <vector>
 
+/// The `game` namespace contains the core functionality of the game application.
 namespace game
 {
     // Types
