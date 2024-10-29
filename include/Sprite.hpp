@@ -21,7 +21,7 @@ namespace game
         const Font& getFont() const;
         Sprite& setFont(const Font& font);
 
-        int render() const override;
+        int draw() const override;
     private:
         SDL_Point m_position;
         Texture m_texture;

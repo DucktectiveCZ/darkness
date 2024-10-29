@@ -13,7 +13,7 @@
 #include <string>
 #include <sys/stat.h>
 
-std::string game::getErrorName(Status error) {
+std::string game::getStatusName(Status error) {
     static const std::unordered_map<Status, const char*> names = {
         { Status::SUCCESS,   "success" },
         { Status::UNKNOWN,   "unknown"},
@@ -27,8 +27,8 @@ std::string game::getErrorName(Status error) {
         return it->second;
     return "<undefined>";
 }
-std::string game::getErrorName(int error) {
-    return getErrorName((game::Status)error);
+std::string game::getStatusName(int error) {
+    return getStatusName((game::Status)error);
 }
 int game::m_initsdl() {
     spdlog::info("Starting SDL2 initialization...");
@@ -108,7 +108,10 @@ int game::m_render() {
     SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
     SDL_RenderClear(m_renderer);
     
-    // TODO Render all registered drawables
+    // Render the drawables
+    for (auto drawable : m_drawables) {
+        drawable->draw();
+    }
 
     SDL_RenderPresent(m_renderer);
     return game::SUCCESS;
@@ -152,11 +155,11 @@ int game::m_gameTick() {
     return game::SUCCESS;
 }
 void game::panic(int errcode, std::string message) {
-    spdlog::critical("A critical error has occured in the application:\nname: {}\ncode: {}\nmessage: {}", game::getErrorName(errcode), errcode, message);
+    spdlog::critical("A critical error has occured in the application:\nname: {}\ncode: {}\nmessage: {}", game::getStatusName(errcode), errcode, message);
     m_cleanup(errcode);
 }
 void game::panic(int errcode) {
-    spdlog::critical("A critical error has occured in the application:\nname: {}\ncode: {}", game::getErrorName(errcode), errcode);
+    spdlog::critical("A critical error has occured in the application:\nname: {}\ncode: {}", game::getStatusName(errcode), errcode);
     m_cleanup(errcode);
 }
 void game::panic() {

@@ -10,7 +10,7 @@ namespace game
     public:
         using RenderCallback = std::function<int()>;
 
-        virtual int render() const = 0;
+        virtual int draw() const = 0;
     };
     class IRenderable {
     public:
