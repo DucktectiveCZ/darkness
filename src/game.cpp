@@ -16,7 +16,7 @@
 std::string game::getStatusName(Status error) {
     static const std::unordered_map<Status, const char*> names = {
         { Status::SUCCESS,   "success" },
-        { Status::UNKNOWN,   "unknown"},
+        { Status::FAILURE,   "unknown"},
         { Status::SDL_INIT,  "sdl_init"},
         { Status::GAME_INIT, "game_init" },
         { Status::SDL_ERROR, "sdl_error" },
@@ -164,7 +164,7 @@ void game::panic(int errcode) {
 }
 void game::panic() {
     spdlog::critical("A critical error has occured in the application");
-    m_cleanup(Status::UNKNOWN);
+    m_cleanup(Status::FAILURE);
 }
 
 inline const SDL_Point& game::getMousePos() {

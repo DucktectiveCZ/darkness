@@ -1,6 +1,5 @@
 #ifndef SPRITE_H
 #define SPRITE_H
-#include "Font.hpp"
 #include "Rendering.hpp"
 #include "../include/Graphics.hpp"
 #include "texture.hpp"
@@ -18,8 +17,6 @@ namespace game
         Sprite& setPosition(const SDL_Point& position);
         const Texture& getTexture() const;
         Sprite& setTexture(const Texture& texture);
-        const Font& getFont() const;
-        Sprite& setFont(const Font& font);
 
         int draw() const override;
     private:

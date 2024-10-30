@@ -26,8 +26,21 @@ namespace game
         /// @brief Sets the texture's dimensions (width & height)
         /// @returns a reference to @this
         Texture& setDimensions(const SDL_Rect& value);
-        /// @brief Gets the SDL_Texture*a
-        /// @returns the SDL_Texture*s
+        /// @brief Gets the texture's width
+        /// @returns the width
+        int getWidth() const;
+        /// @brief Sets the texture's width
+        /// @returns a reference to @this
+        Texture& setWidth(const int& value);
+        /// @brief Gets the texture's height
+        /// @returns the height
+        int getHeight() const;
+        /// @brief Sets the texture's height
+        /// @returns a reference to @this
+        Texture& setHeight(const int& value);
+        
+        /// @brief Gets the SDL_Texture*
+        /// @returns the SDL_Texture*
         SDL_Texture* getTexture() const;
         /// @brief Gets the rotation
         /// @returns the rotation

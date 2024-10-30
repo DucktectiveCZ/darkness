@@ -68,6 +68,27 @@ game::Texture& game::Texture::operator=(const Texture& other) {
 }
 
 int game::Texture::render(SDL_Point pos) const {
+    if (m_texture == nullptr) {
+        return game::FAILURE;
+    }
     SDL_RenderCopyEx(game::getRenderer(), m_texture, NULL, &m_dimensions, m_rotation, &pos, SDL_FLIP_NONE);
     return game::SUCCESS;
+}
+
+int game::Texture::getWidth() const {
+    return m_dimensions.w;
+}
+
+int game::Texture::getHeight() const {
+    return m_dimensions.h;
+}
+
+game::Texture& game::Texture::setWidth(const int& width) {
+    m_dimensions.w = width;
+    return *this;
+}
+
+game::Texture& game::Texture::setHeight(const int& height) {
+    m_dimensions.h = height;
+    return *this;
 }

@@ -24,7 +24,7 @@ namespace game
     /// - `ILLEGAL_GET`: An illegal attempt was made to retrieve a value.
     enum Status {
         SUCCESS = 0,
-        UNKNOWN = 1,
+        FAILURE = 1,
         SDL_INIT,
         GAME_INIT,
         SDL_ERROR,
